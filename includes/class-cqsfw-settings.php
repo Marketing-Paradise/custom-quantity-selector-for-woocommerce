@@ -72,13 +72,13 @@ class CQSFW_Settings {
 
 		return array(
 			array(
-				'title' => __( 'Custom Quantity Selector', 'custom-quantity-selector-for-woocommerce' ),
+				'title' => __( 'Custom quantity selector', 'custom-quantity-selector-for-woocommerce' ),
 				'desc'  => __( 'Configure the global quantity increment (step) and minimum purchase quantity for products. Both values accept numbers greater than zero with up to two decimal places.', 'custom-quantity-selector-for-woocommerce' ),
 				'type'  => 'title',
 				'id'    => 'cqsfw_quantity_options',
 			),
 			array(
-				'title'             => __( 'Quantity Step', 'custom-quantity-selector-for-woocommerce' ),
+				'title'             => __( 'Quantity step', 'custom-quantity-selector-for-woocommerce' ),
 				'desc'              => __( 'Increment value used when changing product quantities (e.g., 0.5, 1, 2.25).', 'custom-quantity-selector-for-woocommerce' ),
 				'desc_tip'          => true,
 				'id'                => CQSFW_Plugin::OPTION_NAME . '[step]',
@@ -90,7 +90,7 @@ class CQSFW_Settings {
 				),
 			),
 			array(
-				'title'             => __( 'Minimum Quantity', 'custom-quantity-selector-for-woocommerce' ),
+				'title'             => __( 'Minimum quantity', 'custom-quantity-selector-for-woocommerce' ),
 				'desc'              => __( 'Minimum quantity allowed per product on product pages and in the cart (e.g., 0.5, 1, 5).', 'custom-quantity-selector-for-woocommerce' ),
 				'desc_tip'          => true,
 				'id'                => CQSFW_Plugin::OPTION_NAME . '[min_quantity]',
@@ -195,9 +195,9 @@ class CQSFW_Settings {
 		}
 
 		if ( 'step' === $field_key ) {
-			$message = __( 'Quantity Step must be a number greater than 0 (up to 2 decimal places). Previous value was kept.', 'custom-quantity-selector-for-woocommerce' );
+			$message = __( 'Quantity step must be a number greater than 0 (up to 2 decimal places). Previous value was kept.', 'custom-quantity-selector-for-woocommerce' );
 		} else {
-			$message = __( 'Minimum Quantity must be a number greater than 0 (up to 2 decimal places). Previous value was kept.', 'custom-quantity-selector-for-woocommerce' );
+			$message = __( 'Minimum quantity must be a number greater than 0 (up to 2 decimal places). Previous value was kept.', 'custom-quantity-selector-for-woocommerce' );
 		}
 
 		WC_Admin_Settings::add_error( $message );
