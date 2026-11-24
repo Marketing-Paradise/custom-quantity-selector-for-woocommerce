@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+vendor/
+.venv/
+
+# Compilación y distribución
+dist/
+build/
+*.pyc
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.swp
