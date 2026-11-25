@@ -28,6 +28,14 @@ final class CQSFW_Plugin {
 	const OPTION_NAME = 'cqsfw_settings';
 
 	/**
+	 * Product meta key for per-product minimum quantity override.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	const PRODUCT_MIN_QTY_META_KEY = '_cqsfw_min_quantity';
+
+	/**
 	 * Singleton instance.
 	 *
 	 * @since 1.0.0
@@ -123,6 +131,49 @@ final class CQSFW_Plugin {
 			'step'         => $step > 0 ? $step : $defaults['step'],
 			'min_quantity' => $min_quantity > 0 ? $min_quantity : $defaults['min_quantity'],
 		);
+	}
+
+	/**
+	 * Retrieve the effective minimum quantity for a specific product.
+	 *
+	 * Returns the product-level override when set, falling back to the global setting.
+	 * Variations inherit the override configured on their parent variable product.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $product Product instance.
+	 * @return float
+	 */
+	public static function get_product_min_quantity( $product ) {
+		$settings   = self::get_settings();
+		$global_min = $settings['min_quantity'];
+
+		if ( ! $product instanceof WC_Product ) {
+			return $global_min;
+		}
+
+		$target_product = $product;
+
+		if ( $product->is_type( 'variation' ) ) {
+			$parent_id = $product->get_parent_id();
+
+			if ( $parent_id > 0 ) {
+				$parent_product = wc_get_product( $parent_id );
+
+				if ( $parent_product instanceof WC_Product ) {
+					$target_product = $parent_product;
+				}
+			}
+		}
+
+		$raw_meta = $target_product->get_meta( self::PRODUCT_MIN_QTY_META_KEY, true );
+
+		if ( '' === $raw_meta || null === $raw_meta || ! is_numeric( $raw_meta ) ) {
+			return $global_min;
+		}
+
+		$product_min = round( (float) $raw_meta, 2 );
+
+		return $product_min > 0 ? $product_min : $global_min;
 	}
 
 	/**

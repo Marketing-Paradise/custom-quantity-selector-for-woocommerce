@@ -71,7 +71,7 @@ class CQSFW_Quantity {
 
 		$settings     = CQSFW_Plugin::get_settings();
 		$step         = $settings['step'];
-		$min_quantity = $settings['min_quantity'];
+		$min_quantity = CQSFW_Plugin::get_product_min_quantity( $product );
 		$input_name   = isset( $args['input_name'] ) ? (string) $args['input_name'] : '';
 		$is_grouped   = 0 === strpos( $input_name, 'quantity[' );
 		$has_decimals = ! $this->is_whole_number( $step ) || ! $this->is_whole_number( $min_quantity );
@@ -99,7 +99,7 @@ class CQSFW_Quantity {
 	}
 
 	/**
-	 * Apply the minimum quantity to variable product variation data.
+	 * Apply the parent product's minimum quantity to variable product variation data.
 	 *
 	 * @since 1.0.0
 	 * @param array<string, mixed> $variation_data Variation data sent to the frontend.
@@ -108,14 +108,11 @@ class CQSFW_Quantity {
 	 * @return array<string, mixed>
 	 */
 	public function filter_variation_quantity( $variation_data, $product, $variation ) {
-		unset( $product );
-
 		if ( ! $this->should_apply_to_product( $variation ) ) {
 			return $variation_data;
 		}
 
-		$settings                  = CQSFW_Plugin::get_settings();
-		$variation_data['min_qty'] = $settings['min_quantity'];
+		$variation_data['min_qty'] = CQSFW_Plugin::get_product_min_quantity( $product );
 
 		return $variation_data;
 	}
@@ -133,8 +130,7 @@ class CQSFW_Quantity {
 			return $args;
 		}
 
-		$settings         = CQSFW_Plugin::get_settings();
-		$args['quantity'] = $settings['min_quantity'];
+		$args['quantity'] = CQSFW_Plugin::get_product_min_quantity( $product );
 
 		return $args;
 	}
@@ -155,13 +151,13 @@ class CQSFW_Quantity {
 			return $value;
 		}
 
-		$settings = CQSFW_Plugin::get_settings();
+		$min_quantity = CQSFW_Plugin::get_product_min_quantity( $product );
 
-		if ( ! $this->is_whole_number( $settings['min_quantity'] ) ) {
+		if ( ! $this->is_whole_number( $min_quantity ) ) {
 			return $value;
 		}
 
-		return max( 1, (int) round( $settings['min_quantity'] ) );
+		return max( 1, (int) round( $min_quantity ) );
 	}
 
 	/**
@@ -182,7 +178,7 @@ class CQSFW_Quantity {
 
 		$settings = CQSFW_Plugin::get_settings();
 		$step     = $settings['step'];
-		$min_qty  = $settings['min_quantity'];
+		$min_qty  = CQSFW_Plugin::get_product_min_quantity( $product );
 
 		if ( ! $this->is_whole_number( $step ) || ! $this->is_whole_number( $min_qty ) ) {
 			return $value;
@@ -294,7 +290,7 @@ class CQSFW_Quantity {
 	private function validate_quantity( $quantity, $product ) {
 		$settings     = CQSFW_Plugin::get_settings();
 		$step         = $settings['step'];
-		$min_quantity = $settings['min_quantity'];
+		$min_quantity = CQSFW_Plugin::get_product_min_quantity( $product );
 		$product_name = $product->get_name();
 
 		if ( $quantity < ( $min_quantity - 0.0001 ) ) {
